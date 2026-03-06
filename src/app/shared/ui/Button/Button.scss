@@ -1,0 +1,35 @@
+.btn-light {
+  border-radius: 8px;
+  padding: 10px 17px;
+  background-color: var(--bg-white);
+  border: 1px solid var(--color-gray-200);
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.btn {
+  border-radius: 8px;
+  padding: 10px 17px;
+  background-color: var(--color-primary-blue);
+  color: var(--color-white);
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.btn_disabled {
+  border-radius: 8px;
+  padding: 10px 17px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  cursor: not-allowed;
+  color: var(--color-gray-400);
+  background-color: var(--color-gray-100);
+}
