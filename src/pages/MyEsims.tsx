@@ -1,5 +1,6 @@
 import type {FC} from "react";
 import {type EsimPlan, PurchasedPlanEsimCard} from "@/app/shared/ui/PurchasedPlanEsimCard/PurchasedPlanEsimCard.tsx";
+import {SectionHeader} from "@/app/shared/ui/SectionHeader/SectionHeader.tsx";
 
 const MyEsims: FC = () => {
     const myPlans = [
@@ -13,7 +14,7 @@ const MyEsims: FC = () => {
 
     return(
         <section className="px-[var(--page-inline-padding)] max-w-[1240px] mx-auto">
-
+            <SectionHeader text="Мои eSim"/>
             <PurchasedPlanEsimCard plans={myPlans}  goToDetails={handleClick} />
         </section>
     )

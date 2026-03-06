@@ -1,6 +1,7 @@
 import {CountryTabs} from "@/app/shared/ui/CountryTabs/CountryTabs.tsx";
 import {EsimPlanCard} from "@/app/shared/ui/EsimPlanCard/EsimPlanCard.tsx";
 import type {FC} from "react";
+import {SectionHeader} from "@/app/shared/ui/SectionHeader/SectionHeader.tsx";
 
 const Home: FC = () => {
     const countries = ["Армения", "Россия", "Грузия", "Беларусь"];
@@ -33,6 +34,7 @@ const Home: FC = () => {
     ];
     return (
         <section className="px-[var(--page-inline-padding)] max-w-[1240px] mx-auto">
+            <SectionHeader text="Купить eSim"/>
             <CountryTabs country={countries}/>
             <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-4 max-w-[1240px] mx-auto">
                 {esimPlans.map((plan) => (
