@@ -10,7 +10,7 @@ export const Navbar = () => {
             <NavLink className={({isActive}) => (isActive ? "active-link" : "")} to="/my-esims">
                 <span>Мои eSim</span>
             </NavLink>
-            <NavLink className={({isActive}) => (isActive ? "active-link" : "")} to="/cards">
+            <NavLink className={({isActive}) => (isActive ? "active-link" : "")} to="/transaction">
                 <span>Транзакции</span>
             </NavLink>
         </nav>
