@@ -3,7 +3,7 @@ import {EsimPlanCard} from "@/app/shared/ui/EsimPlanCard/EsimPlanCard.tsx";
 import type {FC} from "react";
 import {SectionHeader} from "@/app/shared/ui/SectionHeader/SectionHeader.tsx";
 
-const Home: FC = () => {
+const TariffsPage: FC = () => {
     const countries = ["Армения", "Россия", "Грузия", "Беларусь"];
     const esimPlans = [
         {
@@ -49,4 +49,4 @@ const Home: FC = () => {
     )
 }
 
-export default Home;
+export default TariffsPage;
