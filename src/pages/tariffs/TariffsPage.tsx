@@ -2,8 +2,10 @@ import {CountryTabs} from "@/app/shared/ui/CountryTabs/CountryTabs.tsx";
 import {EsimPlanCard} from "@/app/shared/ui/EsimPlanCard/EsimPlanCard.tsx";
 import type {FC} from "react";
 import {SectionHeader} from "@/app/shared/ui/SectionHeader/SectionHeader.tsx";
+import {useNavigate} from "react-router-dom";
 
 const TariffsPage: FC = () => {
+    const navigate = useNavigate();
     const countries = ["Армения", "Россия", "Грузия", "Беларусь"];
     const esimPlans = [
         {
@@ -41,7 +43,7 @@ const TariffsPage: FC = () => {
                     <EsimPlanCard
                         key={plan.id}
                         {...plan}
-                        onClick={(id) => console.log("Clicked:", id)}
+                        onClick={(id) => navigate(`/${id}`)}
                     />
                 ))}
             </div>

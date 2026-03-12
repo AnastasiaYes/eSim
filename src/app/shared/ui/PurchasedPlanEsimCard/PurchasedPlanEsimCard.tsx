@@ -3,6 +3,7 @@ import {statusClasses} from "@/app/styles/statusClasses.ts";
 import iconSim from "@/assets/icon/sim.png"
 
 export interface EsimPlan {
+    id: string;
     name: string;
     status: string;
     balance?: number;
