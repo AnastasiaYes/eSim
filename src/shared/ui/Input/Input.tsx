@@ -68,7 +68,7 @@ export const Input: FC<InputProps> = ({
         setFocused(false);
     };
 
-    const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (!rules?.includes("phone")) return;
 
         const allowedKeys = [

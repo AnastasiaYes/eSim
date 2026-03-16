@@ -7,6 +7,7 @@ import EsimDetails from "@/pages/esims/EsimDetails.tsx";
 import TariffDetails from "@/pages/tariffs/TariffDetails.tsx";
 
 export const App = () => {
+
     return (
         <>
             <Header />
