@@ -1,29 +1,29 @@
 import {type FC, useState} from "react";
 import "./CountryTabs.scss"
 
-type CountryTabsProps = {
-    country: string[];
-    onSelect?: (selected: string) => void;
-};
+interface CountryTabsProps {
+    countries: string[]; // а не country
+    onSelect: (c: string) => void;
+}
 
-export const CountryTabs: FC<CountryTabsProps> = ({country, onSelect}) => {
-    const [active, setActive] = useState<string>(country[0] || "");
+export const CountryTabs: FC<CountryTabsProps> = ({ countries, onSelect }) => {
+    const [active, setActive] = useState<string>(countries[0] || "");
 
-    const handleClick = (c: string) => {
-        setActive(c);
-        onSelect?.(c);
+    const handleClick = (countryCode: string) => {
+        setActive(countryCode);
+        onSelect?.(countryCode);
     };
 
     return (
         <div className="country-tabs-wrapper">
             <div className="tabs">
-                {country.map((c) => (
+                {countries.map((country) => (
                     <span
-                        key={c}
-                        className={active === c ? "active" : ""}
-                        onClick={() => handleClick(c)}
+                        key={country}
+                        className={active === country ? "active" : ""}
+                        onClick={() => handleClick(country)}
                     >
-                        {c}
+                        {country} {/* или country.name если есть поле name */}
                     </span>
                 ))}
             </div>

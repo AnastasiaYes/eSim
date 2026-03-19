@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import logo from "@/assets/logo.png"
-import {Navbar} from "@/app/shared/ui/Header/Navbar.tsx";
-import {ReloadButton} from "@/app/shared/ui/Header/ReloadButton.tsx";
+import {Navbar} from "@/shared/ui/Header/Navbar.tsx";
+import {ReloadButton} from "@/shared/ui/Header/ReloadButton.tsx";
+
 
 export const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);

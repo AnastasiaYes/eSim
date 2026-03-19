@@ -1,5 +1,5 @@
 import type {FC} from "react";
-import {SectionHeader} from "@/app/shared/ui/SectionHeader/SectionHeader.tsx";
+import {SectionHeader} from "@/shared/ui/SectionHeader/SectionHeader.tsx";
 
 const TariffDetails: FC = () => {
 

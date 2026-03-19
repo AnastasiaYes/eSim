@@ -1,6 +1,7 @@
 import {type FC, useState} from "react";
-import {SectionHeader} from "@/app/shared/ui/SectionHeader/SectionHeader.tsx";
-import {SearchInputSimple} from "@/app/shared/ui/SearchInputSimple/SearchInputSimple.tsx"
+import {SectionHeader} from "@/shared/ui/SectionHeader/SectionHeader.tsx";
+import {SearchInputSimple} from "@/shared/ui/SearchInputSimple/SearchInputSimple.tsx";
+
 
 const Transaction: FC = () => {
     const [searchQuery, setSearchQuery] = useState("");

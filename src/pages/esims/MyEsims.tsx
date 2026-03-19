@@ -1,7 +1,7 @@
 import type {FC} from "react";
-import {type EsimPlan, PurchasedPlanEsimCard} from "@/app/shared/ui/PurchasedPlanEsimCard/PurchasedPlanEsimCard.tsx";
-import {SectionHeader} from "@/app/shared/ui/SectionHeader/SectionHeader.tsx";
 import {useNavigate} from "react-router-dom";
+import {type EsimPlan, PurchasedPlanEsimCard} from "@/shared/ui/PurchasedPlanEsimCard/PurchasedPlanEsimCard.tsx";
+import {SectionHeader} from "@/shared/ui/SectionHeader/SectionHeader.tsx";
 
 const MyEsims: FC = () => {
     const navigate = useNavigate();
