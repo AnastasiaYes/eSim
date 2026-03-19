@@ -89,14 +89,14 @@ export const EsimPlanCard: FC<EsimPlanCardProps> = ({ plan, onClick }) => {
                         }).format(price)}
                     </span>
                     {!isAvailable && (
-                        <span className="text-xs text-gray-400">
+                        <span className="text-xs text-[var(--color-gray-400)]">
                             Недоступно
                         </span>
                     )}
                 </div>
 
                 {/* Код страны */}
-                <div className="mt-2 text-xs text-gray-400">
+                <div className="mt-2 text-xs text-[var(--color-gray-400)]">
                     Код: {plan.countryCode}
                 </div>
             </div>

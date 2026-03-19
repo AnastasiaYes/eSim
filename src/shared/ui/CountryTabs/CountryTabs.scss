@@ -1,36 +1,41 @@
 .country-tabs-wrapper {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch; // плавный скролл на iOS
+  position: relative;
   max-width: 1240px;
   margin: 20px auto;
+}
 
-  /* скрываем скроллбар в Webkit (Chrome, Safari, Edge) */
-  &::-webkit-scrollbar {
-    display: none;
-  }
+.country-tabs-wrapper-inner {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; /* плавный скролл на iOS */
 
-  /* Firefox */
-  scrollbar-width: none;
+  /* скрываем скроллbar */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE и Edge */
+}
 
-  .tabs {
-    display: flex;
-    gap: 16px;
-    white-space: nowrap;
+.country-tabs-wrapper-inner::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
 
-    span {
-      display: inline-block;
-      padding: 8px 16px;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: background-color 0.2s;
+.tabs {
+  display: flex;
+  gap: 16px;
+  white-space: nowrap;
+  padding: 4px 0;
+}
 
-      &:hover {
-        background-color: var(--bg-blue-100);
-      }
+.tabs span {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
 
-      &.active {
-        background-color: var(--bg-blue-100);
-      }
-    }
-  }
+.tabs span:hover {
+  background-color: var(--bg-blue-100);
+}
+
+.tabs span.active {
+  background-color: var(--bg-blue-100);
 }

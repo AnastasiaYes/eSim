@@ -88,7 +88,7 @@ export const Input: FC<InputProps> = ({
                     "absolute left-3 transition-all duration-200 pointer-events-none px-[5px] rounded-[8px]",
                     isFocused || modelValue
                         ? "top-[-9px] bg-white text-[12px] text-gray-700"
-                        : "top-[50%] -translate-y-1/2 text-gray-400"
+                        : "top-[50%] -translate-y-1/2 text-[var(--color-gray-400)]"
                 )}
             >
                 {label}
@@ -104,8 +104,8 @@ export const Input: FC<InputProps> = ({
                 onKeyDown={handleKeyDown}
                 disabled={loading}
                 className={clsx(
-                    "border border-gray-100 rounded-[8px] text-gray-500 bg-light-gray px-[12px] py-[15px] focus:ring-1 focus:border-blue-600 w-full box-border",
-                    showError && "text-red-500",
+                    "border border-gray-100 rounded-[8px] text-[var(--color-gray-500)]  bg-light-gray px-[12px] py-[15px] focus:ring-1 focus:border-blue-600 w-full box-border",
+                    showError && "text-[var(--color-red)]",
                     loading && "opacity-70",
                     className
                 )}
@@ -114,7 +114,7 @@ export const Input: FC<InputProps> = ({
 
             {/* Error */}
             <div className="h-[16px]">
-                {showError && <p className="text-red-500 text-[12px]">{errorMessage}</p>}
+                {showError && <p className="text-[var(--color-red)]  text-[12px]">{errorMessage}</p>}
             </div>
         </div>
     );

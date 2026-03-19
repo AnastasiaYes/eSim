@@ -6,12 +6,20 @@ import {SectionHeader} from "@/shared/ui/SectionHeader/SectionHeader.tsx";
 import {CountryTabs} from "@/shared/ui/CountryTabs/CountryTabs.tsx";
 import {EsimPlanCard} from "@/shared/ui/EsimPlanCard/EsimPlanCard.tsx";
 import type {CardCatalogEsimResponse} from "@/shared/api/api.ts";
+import * as countriesLib from 'i18n-iso-countries';
+import enLocale from 'i18n-iso-countries/langs/en.json';
+import ruLocale from 'i18n-iso-countries/langs/ru.json';
+
+countriesLib.registerLocale(enLocale);
+countriesLib.registerLocale(ruLocale);
+
 
 const TariffsPage: FC = () => {
+
     const navigate = useNavigate();
     const [selectedCountry, setSelectedCountry] = useState<string>('');
 
-    const { data: countries, error: countriesError, isLoading: countriesLoading } = useAvailableCountries();
+    const { data: countriesData, error: countriesError, isLoading: countriesLoading } = useAvailableCountries();
     const {
         data: catalogData,
         error: catalogError,
@@ -25,29 +33,35 @@ const TariffsPage: FC = () => {
     }
 
     if (countriesError) {
-        return <div className="text-center py-10 text-red-500">
+        return <div className="text-center py-10 text-[var(--color-red)]">
             Ошибка загрузки стран: {countriesError.message}
         </div>;
     }
 
     if (catalogError) {
-        return <div className="text-center py-10 text-red-500">
+        return <div className="text-center py-10 text-[var(--color-red)]">
             Ошибка загрузки тарифов: {catalogError.message}
         </div>;
     }
 
-    // Проверяем длину массива стран
-    const countryCodes: string[] = countries?.map(c => c.code) || [];
+    const countryCodes: string[] = countriesData?.map(c => c.code) || [];
+
+    // Создаем массив объектов с кодом и названием для CountryTabs
+    const countriesWithNames = countryCodes.map(code => ({
+        code: code,
+        name: countriesLib.getName(code, 'ru') || code // 'ru' для русского, можно 'en' для английского
+    }));
 
     // Проверяем каталог
     const catalog = catalogData?.catalog || [];
+    const totalTariffs = catalogData?.pagination?.totalQuantity || 0;
 
     // Если страны пустые, показываем специальное сообщение
     if (countryCodes.length === 0) {
         return (
-            <section className="px-[var(--page-inline-padding)] max-w-[1240px] mx-auto py-8">
+            <section className="px-[var(--page-inline-padding)] max-w-[1240px] mx-auto">
                 <SectionHeader text="Купить eSim" />
-                <div className="text-center py-10 text-gray-500">
+                <div className="text-center py-10 text-[var(--color-gray-500)] ">
                     <p className="text-lg mb-2">Нет доступных стран</p>
                     <p className="text-sm">В данный момент нет активных eSIM в каталоге</p>
                 </div>
@@ -56,18 +70,18 @@ const TariffsPage: FC = () => {
     }
 
     return (
-        <section className="px-[var(--page-inline-padding)] max-w-[1240px] mx-auto py-8">
+        <section className="px-[var(--page-inline-padding)] max-w-[1240px] mx-auto">
             <SectionHeader text="Купить eSim" />
 
             {countryCodes.length > 0 && (
                 <CountryTabs
-                    countries={countryCodes}
+                    countries={countriesWithNames}
                     onSelect={setSelectedCountry}
                 />
             )}
 
             {catalogFetching && catalog.length > 0 && (
-                <div className="text-center text-sm text-gray-500 py-2">
+                <div className="text-center text-sm text-[var(--color-gray-500)]  py-2">
                     Обновление тарифов...
                 </div>
             )}
@@ -76,8 +90,12 @@ const TariffsPage: FC = () => {
                 <div className="text-center py-10">Загрузка тарифов...</div>
             ) : (
                 <>
-                    <div className="text-sm text-gray-500 mb-4">
-                        Найдено тарифов: {catalog.length}
+                    <div className="text-sm mb-4">
+                        <span className="text-[var(--color-gray-500)]">Найдено тарифов: {totalTariffs}</span>
+                        {catalog.length < totalTariffs && (
+                            <span className="text-[var(--color-gray-400)] ml-2">
+                    (показано {catalog.length} из {totalTariffs})</span>
+                        )}
                     </div>
 
                     <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6 max-w-[1240px] mx-auto mt-6">
@@ -90,7 +108,7 @@ const TariffsPage: FC = () => {
                         ))}
 
                         {catalog.length === 0 && (
-                            <div className="col-span-full text-center py-10 text-gray-500">
+                            <div className="col-span-full text-center py-10 text-[var(--color-gray-500)] ">
                                 {selectedCountry
                                     ? `Нет доступных тарифов для страны ${selectedCountry}`
                                     : "Выберите страну чтобы увидеть тарифы"}
