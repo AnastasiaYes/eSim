@@ -1,5 +1,5 @@
-import {type FC, useState} from 'react';
-import { useNavigate } from 'react-router-dom';
+import {type FC, useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {useAvailableCountries} from "@/shared/queries/useAvailableCountries.tsx";
 import {useEsimCatalog} from "@/shared/queries/useEsimCatalog.tsx";
 import {SectionHeader} from "@/shared/ui/SectionHeader/SectionHeader.tsx";
@@ -9,24 +9,37 @@ import type {CardCatalogEsimResponse} from "@/shared/api/api.ts";
 import * as countriesLib from 'i18n-iso-countries';
 import enLocale from 'i18n-iso-countries/langs/en.json';
 import ruLocale from 'i18n-iso-countries/langs/ru.json';
+import {Pagination} from "@/shared/ui/Pagination/Pagination.tsx";
 
 countriesLib.registerLocale(enLocale);
 countriesLib.registerLocale(ruLocale);
 
 
 const TariffsPage: FC = () => {
-
     const navigate = useNavigate();
     const [selectedCountry, setSelectedCountry] = useState<string>('');
+    const [currentPage, setCurrentPage] = useState<number>(1);
 
-    const { data: countriesData, error: countriesError, isLoading: countriesLoading } = useAvailableCountries();
+    const {data: countriesData, error: countriesError, isLoading: countriesLoading} = useAvailableCountries();
     const {
         data: catalogData,
         error: catalogError,
         isLoading: catalogLoading,
         isFetching: catalogFetching
-    } = useEsimCatalog(selectedCountry ? { country: selectedCountry, page: 1, quantity: 20 } : { page: 1, quantity: 20 });
+    } = useEsimCatalog(
+        selectedCountry
+            ? { country: selectedCountry, page: currentPage, quantity: 20 }
+            : { page: currentPage, quantity: 20 }
+    );
 
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [selectedCountry]);
 
     if (countriesLoading) {
         return <div className="text-center py-10">Загрузка стран...</div>;
@@ -55,13 +68,14 @@ const TariffsPage: FC = () => {
     // Проверяем каталог
     const catalog = catalogData?.catalog || [];
     const totalTariffs = catalogData?.pagination?.totalQuantity || 0;
+    const totalPages = catalogData?.pagination?.pages || 0;
 
     // Если страны пустые, показываем специальное сообщение
     if (countryCodes.length === 0) {
         return (
             <section className="px-[var(--page-inline-padding)] max-w-[1240px] mx-auto">
-                <SectionHeader text="Купить eSim" />
-                <div className="text-center py-10 text-[var(--color-gray-500)] ">
+                <SectionHeader text="Купить eSim"/>
+                <div className="text-center py-10 text-[var(--color-gray-500)]">
                     <p className="text-lg mb-2">Нет доступных стран</p>
                     <p className="text-sm">В данный момент нет активных eSIM в каталоге</p>
                 </div>
@@ -71,7 +85,7 @@ const TariffsPage: FC = () => {
 
     return (
         <section className="px-[var(--page-inline-padding)] max-w-[1240px] mx-auto">
-            <SectionHeader text="Купить eSim" />
+            <SectionHeader text="Купить eSim"/>
 
             {countryCodes.length > 0 && (
                 <CountryTabs
@@ -98,7 +112,8 @@ const TariffsPage: FC = () => {
                         )}
                     </div>
 
-                    <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6 max-w-[1240px] mx-auto mt-6">
+                    <div
+                        className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6 max-w-[1240px] mx-auto mt-6">
                         {catalog.map((plan: CardCatalogEsimResponse) => (
                             <EsimPlanCard
                                 key={plan.id}
@@ -115,6 +130,11 @@ const TariffsPage: FC = () => {
                             </div>
                         )}
                     </div>
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                    />
                 </>
             )}
         </section>
