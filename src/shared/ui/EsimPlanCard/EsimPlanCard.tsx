@@ -17,9 +17,6 @@ export const EsimPlanCard: FC<EsimPlanCardProps> = ({ plan, onClick }) => {
     const price = plan.price; // теперь это просто number
     const currency = plan.currency; // теперь это string
 
-    // В свагере нет поля images/image, используем заглушку
-    const imageUrl = 'https://www.eastchinatrip.com/wp-content/uploads/eSIM.webp';
-
     const isAvailable = plan.isActive; // используем isActive из свагера
 
     // Форматируем количество данных
@@ -34,26 +31,16 @@ export const EsimPlanCard: FC<EsimPlanCardProps> = ({ plan, onClick }) => {
         <div
             onClick={handleClick}
             className={`
-                relative bg-white rounded-xl shadow-md overflow-hidden 
+                relative rounded-xl shadow-md overflow-hidden 
                 transition-all duration-300 
                 ${onClick ? 'cursor-pointer hover:shadow-lg hover:scale-[1.02]' : ''}
                 ${!isAvailable ? 'opacity-50' : ''}
                 border border-gray-100
             `}
         >
-            <div className="h-48 overflow-hidden bg-gray-50">
-                <img
-                    src={imageUrl}
-                    alt={plan.name}
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                        e.currentTarget.src = "https://via.placeholder.com/300x200?text=eSIM";
-                    }}
-                />
-            </div>
 
-            <div className="p-4">
-                <h3 className="text-lg font-semibold text-gray-800 mb-2 line-clamp-2">
+            <div className="p-4 flex flex-col h-full">
+                <h3 className="text-lg font-semibold line-clamp-2">
                     {plan.name}
                 </h3>
 
@@ -64,23 +51,23 @@ export const EsimPlanCard: FC<EsimPlanCardProps> = ({ plan, onClick }) => {
                 )}
 
                 {/* Информация о пакете */}
-                <div className="flex flex-wrap gap-2 mb-3">
-                    <span className="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded-full">
+                <div className="flex gap-2 flex-wrap py-4">
+                    <span className="bg-blue-50 text-blue-700 text-[12px] px-2 py-1 rounded-full">
                         📱 {dataDisplay}
                     </span>
-                    <span className="bg-green-50 text-green-700 text-xs px-2 py-1 rounded-full">
+                    <span className="bg-green-50 text-green-700 text-[12px] px-2 py-1 rounded-full">
                         ⏱ {validityDisplay}
                     </span>
                     {plan.packageType && (
-                        <span className="bg-purple-50 text-purple-700 text-xs px-2 py-1 rounded-full">
+                        <span className="bg-purple-50 text-purple-700 text-[12px] px-2 py-1 rounded-full">
                             {plan.packageType}
                         </span>
                     )}
                 </div>
 
                 {/* Цена */}
-                <div className="flex items-center justify-between">
-                    <span className="text-xl font-bold text-blue-600">
+                <div className="flex items-center justify-between self-end mt-auto">
+                    <span className="text-xl font-bold alig">
                         {new Intl.NumberFormat("en-US", {
                             style: "currency",
                             currency,
@@ -93,11 +80,6 @@ export const EsimPlanCard: FC<EsimPlanCardProps> = ({ plan, onClick }) => {
                             Недоступно
                         </span>
                     )}
-                </div>
-
-                {/* Код страны */}
-                <div className="mt-2 text-xs text-[var(--color-gray-400)]">
-                    Код: {plan.countryCode}
                 </div>
             </div>
         </div>

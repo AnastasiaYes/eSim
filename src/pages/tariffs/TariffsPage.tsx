@@ -14,7 +14,6 @@ import {Pagination} from "@/shared/ui/Pagination/Pagination.tsx";
 countriesLib.registerLocale(enLocale);
 countriesLib.registerLocale(ruLocale);
 
-
 const TariffsPage: FC = () => {
     const navigate = useNavigate();
     const [selectedCountry, setSelectedCountry] = useState<string>('');
@@ -70,18 +69,6 @@ const TariffsPage: FC = () => {
     const totalTariffs = catalogData?.pagination?.totalQuantity || 0;
     const totalPages = catalogData?.pagination?.pages || 0;
 
-    // Если страны пустые, показываем специальное сообщение
-    if (countryCodes.length === 0) {
-        return (
-            <section className="px-[var(--page-inline-padding)] max-w-[1240px] mx-auto">
-                <SectionHeader text="Купить eSim"/>
-                <div className="text-center py-10 text-[var(--color-gray-500)]">
-                    <p className="text-lg mb-2">Нет доступных стран</p>
-                    <p className="text-sm">В данный момент нет активных eSIM в каталоге</p>
-                </div>
-            </section>
-        );
-    }
 
     return (
         <section className="px-[var(--page-inline-padding)] max-w-[1240px] mx-auto">
@@ -95,7 +82,7 @@ const TariffsPage: FC = () => {
             )}
 
             {catalogFetching && catalog.length > 0 && (
-                <div className="text-center text-sm text-[var(--color-gray-500)]  py-2">
+                <div className="text-center text-sm text-[var(--color-gray-500)] py-2 relative">
                     Обновление тарифов...
                 </div>
             )}
