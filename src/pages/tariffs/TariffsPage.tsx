@@ -10,6 +10,7 @@ import * as countriesLib from 'i18n-iso-countries';
 import enLocale from 'i18n-iso-countries/langs/en.json';
 import ruLocale from 'i18n-iso-countries/langs/ru.json';
 import {Pagination} from "@/shared/ui/Pagination/Pagination.tsx";
+import {SkeletonLoader} from "@/shared/ui/SkeletonLoader/SkeletonLoader.tsx";
 
 countriesLib.registerLocale(enLocale);
 countriesLib.registerLocale(ruLocale);
@@ -27,22 +28,18 @@ const TariffsPage: FC = () => {
         isFetching: catalogFetching
     } = useEsimCatalog(
         selectedCountry
-            ? { country: selectedCountry, page: currentPage, quantity: 20 }
-            : { page: currentPage, quantity: 20 }
+            ? {country: selectedCountry, page: currentPage, quantity: 20}
+            : {page: currentPage, quantity: 20}
     );
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({top: 0, behavior: 'smooth'});
     };
 
     useEffect(() => {
         setCurrentPage(1);
     }, [selectedCountry]);
-
-    if (countriesLoading) {
-        return <div className="text-center py-10">Загрузка стран...</div>;
-    }
 
     if (countriesError) {
         return <div className="text-center py-10 text-[var(--color-red)]">
@@ -64,7 +61,6 @@ const TariffsPage: FC = () => {
         name: countriesLib.getName(code, 'ru') || code // 'ru' для русского, можно 'en' для английского
     }));
 
-    // Проверяем каталог
     const catalog = catalogData?.catalog || [];
     const totalTariffs = catalogData?.pagination?.totalQuantity || 0;
     const totalPages = catalogData?.pagination?.pages || 0;
@@ -74,21 +70,20 @@ const TariffsPage: FC = () => {
         <section className="px-[var(--page-inline-padding)] max-w-[1240px] mx-auto">
             <SectionHeader text="Купить eSim"/>
 
-            {countryCodes.length > 0 && (
+            {catalogLoading && catalog.length === 0 ? (
+                <SkeletonLoader isLoading={true} height="37px" className="my-4"/>
+            ) : (
                 <CountryTabs
                     countries={countriesWithNames}
                     onSelect={setSelectedCountry}
                 />
             )}
 
-            {catalogFetching && catalog.length > 0 && (
-                <div className="text-center text-sm text-[var(--color-gray-500)] py-2 relative">
-                    Обновление тарифов...
+            {catalogLoading ? (
+                <div>
+                    <SkeletonLoader isLoading={true} height="17px" className="my-4"/>
+                    <SkeletonLoader isLoading={true} height="174px" />
                 </div>
-            )}
-
-            {catalogLoading && catalog.length === 0 ? (
-                <div className="text-center py-10">Загрузка тарифов...</div>
             ) : (
                 <>
                     <div className="text-sm mb-4">
