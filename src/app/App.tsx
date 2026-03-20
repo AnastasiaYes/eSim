@@ -13,7 +13,7 @@ export const App = () => {
             <Header />
             <Routes>
                 <Route path="/" element={<TariffsPage />} />
-                <Route path="/:id" element={<TariffDetails />} />
+                <Route path="/esim/:id" element={<TariffDetails />} />
                 <Route path="/my-esims" element={<MyEsims />} />
                 <Route path="/my-esims/:id" element={<EsimDetails />} />
                 <Route path="/transaction" element={<Transaction />} />

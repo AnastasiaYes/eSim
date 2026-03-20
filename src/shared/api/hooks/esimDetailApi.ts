@@ -1,6 +1,6 @@
+import type {CardCatalogEsimResponse, PaginationResponse} from "@/shared/api/api.ts";
 import {api} from "@/shared/api/apiClient.ts";
 import {unwrapResponse} from "@/shared/api/utils/unwrapResponse.ts";
-import type {CardCatalogEsimResponse, PaginationResponse} from "@/shared/api/api.ts";
 
 export type EsimQueryParams = {
     country?: string;
@@ -13,12 +13,12 @@ export type EsimQueryParams = {
     quantity?: number;
 };
 
-export type EsimCatalogData = {
+export type EsimDetailData = {
     catalog: CardCatalogEsimResponse[];
     pagination: PaginationResponse;
 };
 
-export const getEsimCatalog = async (query?: EsimQueryParams): Promise<EsimCatalogData> => {
+export const getEsimDetail = async (query?: EsimQueryParams): Promise<EsimDetailData> => {
     const response = await api.api.getCatalogEsimList(query);
     return unwrapResponse(response.data);
 };

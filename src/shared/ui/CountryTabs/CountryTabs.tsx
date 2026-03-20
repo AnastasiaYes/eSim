@@ -1,4 +1,5 @@
-import {type FC, useEffect, useRef, useState} from "react";
+import {type FC } from "react";
+import clsx from 'clsx';
 import "./CountryTabs.scss";
 
 interface CountryTabsProps {
@@ -6,58 +7,36 @@ interface CountryTabsProps {
     onSelect: (c: string) => void;
 }
 
-export const CountryTabs: FC<CountryTabsProps> = ({ countries, onSelect }) => {
-    const [active, setActive] = useState<string>(countries[0]?.code || "");
-    const [showLeftFade, setShowLeftFade] = useState(false);
-    const [showRightFade, setShowRightFade] = useState(false);
-    const wrapperRef = useRef<HTMLDivElement>(null);
-
-    const checkScroll = () => {
-        if (wrapperRef.current) {
-            const { scrollLeft, scrollWidth, clientWidth } = wrapperRef.current;
-            setShowLeftFade(scrollLeft > 5);
-            setShowRightFade(scrollLeft + clientWidth < scrollWidth - 5);
-        }
-    };
-
-    useEffect(() => {
-        checkScroll();
-        window.addEventListener('resize', checkScroll);
-        return () => window.removeEventListener('resize', checkScroll);
-    }, [countries]);
+export const CountryTabs: FC<CountryTabsProps> = ({countries, onSelect}) => {
+    const getFlagUrl = (code: string) =>
+        `https://flagcdn.com/${code.toLowerCase()}.svg`;
 
     const handleClick = (countryCode: string) => {
-        setActive(countryCode);
         onSelect?.(countryCode);
     };
 
     return (
-        <div className="country-tabs-wrapper relative">
-            {showLeftFade && (
-                <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-white to-transparent pointer-events-none z-10" />
-            )}
+        <div className="grid grid-cols-2 gap-4">
+            {countries.map((country) => (
+                <div
+                    key={country.code}
+                    onClick={() => handleClick(country.code)}
+                    className={clsx(
+                        "flex items-center flex-col gap-4 p-4 rounded-xl border border-gray-100 shadow-md transition-all duration-300",
+                        "cursor-pointer hover:shadow-lg hover:scale-[1.02]"
+                    )}
+                >
+                    <img
+                        src={getFlagUrl(country.code)}
+                        alt={country.name}
+                        className="w-[100px] h-[100px] object-cover rounded-full flex-shrink-0 border border-gray-100 shadow-md "
+                    />
 
-            {showRightFade && (
-                <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-white to-transparent pointer-events-none z-10" />
-            )}
-
-            <div
-                ref={wrapperRef}
-                className="country-tabs-wrapper-inner"
-                onScroll={checkScroll}
-            >
-                <div className="tabs">
-                    {countries.map((country) => (
-                        <span
-                            key={country.code}
-                            className={active === country.code ? "active" : ""}
-                            onClick={() => handleClick(country.code)}
-                        >
-                            {country.name}
-                        </span>
-                    ))}
+                    <h3 className="text-lg font-semibold text-center">
+                        {country.name}
+                    </h3>
                 </div>
-            </div>
+            ))}
         </div>
     );
 };
