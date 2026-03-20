@@ -4,6 +4,7 @@ import MyEsims from "@/pages/esims/MyEsims.tsx";
 import Transaction from "@/pages/transaction/Transactions.tsx";
 import EsimDetails from "@/pages/esims/EsimDetails.tsx";
 import TariffDetails from "@/pages/tariffs/TariffDetails.tsx";
+import Countries from "@/pages/tariffs/Countries.tsx";
 import {Header} from "@/shared/ui/Header/Header.tsx";
 
 export const App = () => {
@@ -12,8 +13,9 @@ export const App = () => {
         <>
             <Header />
             <Routes>
-                <Route path="/" element={<TariffsPage />} />
-                <Route path="/esim/:id" element={<TariffDetails />} />
+                <Route path="/" element={<Countries />} />
+                <Route path="/:id" element={<TariffsPage key={window.location.pathname} />} />
+                <Route path="/:id/esim/:esimId" element={<TariffDetails />} />
                 <Route path="/my-esims" element={<MyEsims />} />
                 <Route path="/my-esims/:id" element={<EsimDetails />} />
                 <Route path="/transaction" element={<Transaction />} />

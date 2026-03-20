@@ -1,34 +1,30 @@
 import {type FC, useEffect, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
-import {useAvailableCountries} from "@/shared/queries/useAvailableCountries.tsx";
+import {useNavigate, useParams} from 'react-router-dom';
 import {useEsimCatalog} from "@/shared/queries/useEsimCatalog.tsx";
 import {SectionHeader} from "@/shared/ui/SectionHeader/SectionHeader.tsx";
-import {CountryTabs} from "@/shared/ui/CountryTabs/CountryTabs.tsx";
 import {EsimPlanCard} from "@/shared/ui/EsimPlanCard/EsimPlanCard.tsx";
 import type {CardCatalogEsimResponse} from "@/shared/api/api.ts";
-import * as countriesLib from 'i18n-iso-countries';
-import enLocale from 'i18n-iso-countries/langs/en.json';
-import ruLocale from 'i18n-iso-countries/langs/ru.json';
 import {Pagination} from "@/shared/ui/Pagination/Pagination.tsx";
 import {SkeletonLoader} from "@/shared/ui/SkeletonLoader/SkeletonLoader.tsx";
+import * as countriesLib from "i18n-iso-countries";
+import enLocale from 'i18n-iso-countries/langs/en.json';
+import ruLocale from 'i18n-iso-countries/langs/ru.json';
 
 countriesLib.registerLocale(enLocale);
 countriesLib.registerLocale(ruLocale);
 
 const TariffsPage: FC = () => {
     const navigate = useNavigate();
-    const [selectedCountry, setSelectedCountry] = useState<string>('');
+    const { id: countryCode } = useParams<{ id: string }>();
     const [currentPage, setCurrentPage] = useState<number>(1);
 
-    const {data: countriesData, error: countriesError, isLoading: countriesLoading} = useAvailableCountries();
     const {
         data: catalogData,
         error: catalogError,
         isLoading: catalogLoading,
-        isFetching: catalogFetching
     } = useEsimCatalog(
-        selectedCountry
-            ? {country: selectedCountry, page: currentPage, quantity: 20}
+        countryCode
+            ? {country: countryCode, page: currentPage, quantity: 20}
             : {page: currentPage, quantity: 20}
     );
 
@@ -38,14 +34,10 @@ const TariffsPage: FC = () => {
     };
 
     useEffect(() => {
-        setCurrentPage(1);
-    }, [selectedCountry]);
-
-    if (countriesError) {
-        return <div className="text-center py-10 text-[var(--color-red)]">
-            Ошибка загрузки стран: {countriesError.message}
-        </div>;
-    }
+        if (!countryCode) {
+            navigate('/');
+        }
+    }, [countryCode, navigate]);
 
     if (catalogError) {
         return <div className="text-center py-10 text-[var(--color-red)]">
@@ -53,31 +45,26 @@ const TariffsPage: FC = () => {
         </div>;
     }
 
-    const countryCodes: string[] = countriesData?.map(c => c.code) || [];
-
-    // Создаем массив объектов с кодом и названием для CountryTabs
-    const countriesWithNames = countryCodes.map(code => ({
-        code: code,
-        name: countriesLib.getName(code, 'ru') || code // 'ru' для русского, можно 'en' для английского
-    }));
-
     const catalog = catalogData?.catalog || [];
     const totalTariffs = catalogData?.pagination?.totalQuantity || 0;
     const totalPages = catalogData?.pagination?.pages || 0;
 
+    const getCountryName = (code: string): string => {
+        if (!code) return '';
+        const name = countriesLib.getName(code, 'ru');
+        return name || code.toUpperCase();
+    };
+
+    if (!countryCode) {
+        return null;
+    }
+
+    const countryName = countryCode ? getCountryName(countryCode) : '';
 
     return (
         <section className="px-[var(--page-inline-padding)] max-w-[1240px] mx-auto">
-            <SectionHeader text="Купить eSim"/>
-
-            {catalogLoading && catalog.length === 0 ? (
-                <SkeletonLoader isLoading={true} height="37px" className="my-4"/>
-            ) : (
-                <CountryTabs
-                    countries={countriesWithNames}
-                    onSelect={setSelectedCountry}
-                />
-            )}
+            <SectionHeader text={countryName} showBackButton={true} onBack={() => navigate('/')}/>
+            <SectionHeader text="Выберите тариф для eSim"/>
 
             {catalogLoading ? (
                 <div>
@@ -100,15 +87,13 @@ const TariffsPage: FC = () => {
                             <EsimPlanCard
                                 key={plan.id}
                                 plan={plan}
-                                onClick={(id: number) => navigate(`/esim/${id}`)}
+                                onClick={(id: number) => navigate(`/${countryCode}/esim/${id}`)}
                             />
                         ))}
 
-                        {catalog.length === 0 && (
-                            <div className="col-span-full text-center py-10 text-[var(--color-gray-500)] ">
-                                {selectedCountry
-                                    ? `Нет доступных тарифов для страны ${selectedCountry}`
-                                    : "Выберите страну чтобы увидеть тарифы"}
+                        {catalog.length === 0 && !catalogLoading && (
+                            <div className="col-span-full text-center py-10 text-gray-500">
+                                Нет доступных тарифов для страны {countryName}
                             </div>
                         )}
                     </div>
