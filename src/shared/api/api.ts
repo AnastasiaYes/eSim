@@ -499,6 +499,34 @@ export class Api<
       }),
 
     /**
+     * @description Get eSIM catalog package details
+     *
+     * @tags Card
+     * @name GetCatalogEsimDetails
+     * @request GET:/api/cards/catalog/esims/{catalogEsimId}
+     * @secure
+     */
+    getCatalogEsimDetails: (
+      catalogEsimId: number,
+      params: RequestParams = {},
+    ) =>
+      this.request<
+        {
+          success: boolean;
+          data: {
+            catalogEsim: CardCatalogEsimResponse;
+          };
+        },
+        any
+      >({
+        path: `/api/cards/catalog/esims/${catalogEsimId}`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
      * @description Get eSIM catalog with filters
      *
      * @tags Card

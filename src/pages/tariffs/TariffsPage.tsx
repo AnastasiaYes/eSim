@@ -64,7 +64,7 @@ const TariffsPage: FC = () => {
     return (
         <section className="px-[var(--page-inline-padding)] max-w-[1240px] mx-auto">
             <SectionHeader text={countryName} showBackButton={true} onBack={() => navigate('/')}/>
-            <SectionHeader text="Выберите тариф для eSim"/>
+            <h2>Выберите тариф для eSim"</h2>
 
             {catalogLoading ? (
                 <div>
